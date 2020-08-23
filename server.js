@@ -56,7 +56,7 @@ app.post("/api", (req, res) => {
 app.get("/all", (req, res) => {
   Secret.find((err, secrets) => {
     if (err) console.log(err);
-    res.send(secrets).json();
+    res.send(secrets);
   });
 });
 
