@@ -7,7 +7,7 @@ const port = 5000;
 const app = express();
 
 app.use(morgan("tiny"));
-const jsonParser = bodyParser.json();
+app.use(bodyParser.json());
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -35,20 +35,28 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/form.html");
 });
 
-app.post("/", urlencodedParser, (req, res) => {
-  const test = new Secret({ secret: req.body.secret });
+// app.post("/", urlencodedParser, (req, res) => {
+//   const test = new Secret({ secret: req.body.secret });
+//   test.save((err) => {
+//     if (err) return console.log(err);
+//   });
+//   // Redirects to page "/all" to show all the secrets submitted by the user
+//   res.redirect("/all");
+// });
+// gets data from the react
+app.post("/api", (req, res) => {
+  const test = new Secret({ secret: req.body.value });
   test.save((err) => {
     if (err) return console.log(err);
   });
-  // Redirects to page "/all" to show all the secrets submitted by the user
-  res.redirect(302, "/all");
+  res.status(200).json();
 });
 
 //Route where all the secrets are displayed.
 app.get("/all", (req, res) => {
   Secret.find((err, secrets) => {
     if (err) console.log(err);
-    res.send(secrets);
+    res.send(secrets).json();
   });
 });
 
