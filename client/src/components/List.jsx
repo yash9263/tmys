@@ -5,7 +5,7 @@ function List() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
+  async function fetchData() {
     fetch("/all") // fetch data from api
       .then((res) => res.json())
       .then(
@@ -19,6 +19,10 @@ function List() {
           setError(error);
         }
       );
+  }
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   if (error) {

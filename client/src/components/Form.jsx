@@ -1,47 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 
-class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: "" };
+function FormList(props) {
+  const [value, setValue] = useState("");
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+  function handleChange(event) {
+    setValue(event.target.value);
   }
 
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    // send data to express for processing
+  function handleSubmit(event) {
     fetch("/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(this.state),
+      body: JSON.stringify({ value }),
     })
       .then((res) => res.json())
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error: ", error);
       });
+    window.location.reload(false);
+    event.preventDefault();
   }
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        <button type="submit">Submit</button>
-        <p>Here goes the output: {this.state.value}</p>
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" value={value} onChange={handleChange} />
+      <button type="submit">Submit</button>
+      <p>Here goes the output: {value}</p>
+    </form>
+  );
 }
 
-export default Form;
+export default FormList;

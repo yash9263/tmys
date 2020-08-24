@@ -25,6 +25,7 @@ db.on("error", console.error.bind(console, "connection error: "));
 //Mongoose schema for storing users secrets
 const secretSchema = new mongoose.Schema({
   secret: String,
+  created_at: { type: Date, default: Date.now },
 });
 
 //Initialize the Schema
@@ -45,11 +46,12 @@ app.get("/", (req, res) => {
 // });
 // gets data from the react
 app.post("/api", (req, res) => {
+  // console.log(req.body);
   const test = new Secret({ secret: req.body.value });
   test.save((err) => {
     if (err) return console.log(err);
   });
-  res.status(200).json();
+  res.status(201);
 });
 
 //Route where all the secrets are displayed.
